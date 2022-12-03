@@ -1,4 +1,4 @@
-extern crate nokhwa;
+// extern crate nokhwa;
 
 use nokhwa::*;
 

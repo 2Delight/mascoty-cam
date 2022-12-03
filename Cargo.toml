@@ -5,5 +5,6 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
-[dependencies]
-nokhwa = { version = "0.9.4", features = [ "input-avfoundation", "input-msmf", "output-wgpu"]}
+[dependencies.nokhwa]
+version = "0.9.4"
+features = ["input-avfoundation", "input-msmf", "output-wgpu"]
