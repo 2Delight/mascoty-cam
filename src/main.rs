@@ -1,25 +1,26 @@
 extern crate nokhwa;
  
-use nokhwa::{Camera, CameraFormat, FrameFormat, CaptureAPIBackend};
+use nokhwa::*;
  
 fn main() {
-    CaptureAPIBackend::Auto;
-    let mut camera = Camera::new(
-        0,
-        Some(
-            CameraFormat::new_from(
-                640,
-                480,
-                FrameFormat::MJPEG,
-                30
-            )
-        ),
-    ).unwrap();
+    let cams = query_devices(CaptureAPIBackend::Auto).unwrap();
+    println!("{}", cams.len());
+    println!("{}", cams[0].index());
  
+    if cams.len() == 0 {
+        println!("OOF");
+    }
+ 
+    let mut camera = Camera::new(
+        cams[0].index(),
+        Some(CameraFormat::new_from(640, 480, FrameFormat::MJPEG, 30)),
+    )
+    .unwrap();
+ 
+    println!("{}", camera.info());
  
     camera.open_stream().unwrap();
-    loop {
-        let frame = camera.frame().unwrap();
-        println!("{}, {}", frame.width(), frame.height());
-    }
+ 
+    let frame = camera.frame().unwrap();
+    println!("{}, {}, {:?}", frame.width(), frame.height(), frame.get_pixel(10, 10).0);
 }
