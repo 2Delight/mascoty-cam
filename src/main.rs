@@ -8,7 +8,7 @@ fn main() {
     println!("{}", cams[0].index());
  
     if cams.len() == 0 {
-        println!("OOF");
+        panic!("OOF");
     }
  
     let mut camera = Camera::new(
