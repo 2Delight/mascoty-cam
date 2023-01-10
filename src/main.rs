@@ -1,9 +1,14 @@
 // extern crate nokhwa;
 
-use nokhwa::*;
+use nokhwa::backends::capture::AVFoundationCaptureDevice;
+use nokhwa::query;
+use nokhwa::utils::Resolution;
+use nokhwa::utils::{ApiBackend, CameraFormat, FrameFormat, RequestedFormat, RequestedFormatType};
+use nokhwa::Camera;
+use nokhwa::pixel_format::RgbFormat;
 
 fn main() {
-    let cams = query_devices(CaptureAPIBackend::Auto).unwrap();
+    let cams = query(ApiBackend::Auto).unwrap();
     println!("{}", cams.len());
     println!("{}", cams[0].index());
 
@@ -11,11 +16,10 @@ fn main() {
         panic!("OOF");
     }
 
-    let mut camera = Camera::new(
-        cams[0].index(),
-        Some(CameraFormat::new_from(1280, 720, FrameFormat::MJPEG, 30)),
-    )
-    .unwrap();
+    let format_type = RequestedFormatType::Exact(CameraFormat::new_from(1280, 720, FrameFormat::MJPEG, 30));
+    let form = RequestedFormat::new::<RgbFormat>(format_type);
+
+    let mut camera = Camera::new(cams[0].index().to_owned(), form).unwrap();
 
     println!("{}", camera.info());
 
@@ -23,9 +27,8 @@ fn main() {
 
     let frame = camera.frame().unwrap();
     println!(
-        "{}, {}, {:?}",
-        frame.width(),
-        frame.height(),
-        frame.get_pixel(10, 10).0
+        "{}, {}",
+        frame.resolution().x(),
+        frame.resolution().y(),
     );
 }
