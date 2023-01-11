@@ -1,8 +1,6 @@
-// extern crate nokhwa;
+extern crate nokhwa;
 
-use nokhwa::backends::capture::AVFoundationCaptureDevice;
 use nokhwa::query;
-use nokhwa::utils::Resolution;
 use nokhwa::utils::{ApiBackend, CameraFormat, FrameFormat, RequestedFormat, RequestedFormatType};
 use nokhwa::Camera;
 use nokhwa::pixel_format::RgbFormat;
@@ -17,9 +15,8 @@ fn main() {
     }
 
     let format_type = RequestedFormatType::Exact(CameraFormat::new_from(1280, 720, FrameFormat::MJPEG, 30));
-    let form = RequestedFormat::new::<RgbFormat>(format_type);
-
-    let mut camera = Camera::new(cams[0].index().to_owned(), form).unwrap();
+    let format = RequestedFormat::new::<RgbFormat>(format_type);
+    let mut camera = Camera::new(cams[0].index().to_owned(), format).unwrap();
 
     println!("{}", camera.info());
 
